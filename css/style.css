@@ -1,0 +1,704 @@
+/* ==========================================================================
+   SpinWheel Web Portal - Luminous Analyst Design System
+   ========================================================================== */
+
+/* 引入 Google Fonts - Plus Jakarta Sans */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+
+/* --------------------------------------------------------------------------
+   1. 变量与主题定义 (Design Tokens)
+   -------------------------------------------------------------------------- */
+:root {
+  /* 浅色模式 (Light Mode) */
+  --primary: #0088FF;
+  --primary-rgb: 0, 136, 255;
+  --primary-gradient: linear-gradient(135deg, #0088FF 0%, #0066CC 100%);
+  --primary-hover: #0077EE;
+  
+  --background: #F6FAFE;
+  --surface: #F6FAFE;
+  
+  --surface-container-lowest: #FFFFFF;
+  --surface-container-low: #F0F4F8;
+  --surface-container-high: #E2E8F0;
+  --surface-container-highest: #CBD5E1;
+  
+  --on-surface: #171C1F;
+  --on-surface-variant: #404754;
+  --outline-variant: rgba(192, 201, 218, 0.25); /* 幽灵线条 (Ghost Border) */
+  
+  --shadow-sm: 0 2px 8px rgba(0, 136, 255, 0.04);
+  --shadow-md: 0 10px 30px rgba(0, 136, 255, 0.06);
+  --shadow-lg: 0 20px 50px rgba(0, 136, 255, 0.08);
+  
+  --glass-bg: rgba(255, 255, 255, 0.75);
+  --glass-border: rgba(192, 201, 218, 0.18);
+  --glass-shadow: 0 8px 32px 0 rgba(0, 136, 255, 0.04);
+  
+  --orb-1: rgba(0, 136, 255, 0.06);
+  --orb-2: rgba(99, 102, 241, 0.06);
+  
+  --font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --radius-twelve: 12px;
+  --radius-sixteen: 16px;
+  --max-width: 1240px;
+  --navbar-height: 80px;
+  --transition-speed: 0.2s;
+}
+
+/* 强制/手动暗色模式或跟随系统 */
+body.dark {
+  /* 暗色模式 (Dark Mode) */
+  --primary: #3DA9FF;
+  --primary-rgb: 61, 169, 255;
+  --primary-gradient: linear-gradient(135deg, #3DA9FF 0%, #0088FF 100%);
+  --primary-hover: #5cb8ff;
+  
+  --background: #0B1220;
+  --surface: #0B1220;
+  
+  --surface-container-lowest: #1A2436;
+  --surface-container-low: #131B2C;
+  --surface-container-high: #1F2A3F;
+  --surface-container-highest: #25324A;
+  
+  --on-surface: #E6EDF3;
+  --on-surface-variant: #A6B0BF;
+  --outline-variant: rgba(42, 51, 70, 0.3);
+  
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.2);
+  --shadow-md: 0 10px 30px rgba(0, 0, 0, 0.25);
+  --shadow-lg: 0 20px 50px rgba(0, 0, 0, 0.35);
+  
+  --glass-bg: rgba(26, 36, 54, 0.7);
+  --glass-border: rgba(42, 51, 70, 0.35);
+  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+  
+  --orb-1: rgba(61, 169, 255, 0.08);
+  --orb-2: rgba(99, 102, 241, 0.08);
+}
+
+/* --------------------------------------------------------------------------
+   2. 基础与布局重置 (Base & Resets)
+   -------------------------------------------------------------------------- */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: calc(var(--navbar-height) + 24px);
+}
+
+body {
+  font-family: var(--font-family);
+  background-color: var(--background);
+  color: var(--on-surface);
+  line-height: 1.6;
+  overflow-x: hidden;
+  transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease;
+  min-height: 100vh;
+  position: relative;
+}
+
+a {
+  color: var(--primary);
+  text-decoration: none;
+  transition: color var(--transition-speed) ease, opacity var(--transition-speed) ease;
+}
+
+a:hover {
+  color: var(--primary-hover);
+}
+
+/* --------------------------------------------------------------------------
+   3. 装饰发光背景 (Luminous Background Orbs)
+   -------------------------------------------------------------------------- */
+.bg-orbs {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(140px);
+  will-change: transform;
+}
+
+.orb-top-right {
+  top: -200px;
+  right: -200px;
+  width: 600px;
+  height: 600px;
+  background: var(--orb-1);
+}
+
+.orb-bottom-left {
+  bottom: 10%;
+  left: -200px;
+  width: 500px;
+  height: 500px;
+  background: var(--orb-2);
+}
+
+/* --------------------------------------------------------------------------
+   4. 玻璃拟态导航栏 (Glassmorphism Navbar)
+   -------------------------------------------------------------------------- */
+.navbar {
+  position: sticky;
+  top: 0;
+  height: var(--navbar-height);
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+  z-index: 100;
+  transition: background var(--transition-speed) ease, border-bottom var(--transition-speed) ease;
+}
+
+.navbar-container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+}
+
+.nav-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: 800;
+  font-size: 1.25rem;
+  color: var(--on-surface);
+}
+
+.nav-logo-svg {
+  width: 32px;
+  height: 32px;
+  fill: var(--primary);
+  filter: drop-shadow(0 2px 8px rgba(var(--primary-rgb), 0.3));
+}
+
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.nav-link {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--on-surface-variant);
+  padding: 8px 16px;
+  border-radius: var(--radius-twelve);
+  transition: all var(--transition-speed) ease;
+}
+
+.nav-link:hover, .nav-link.active {
+  color: var(--primary);
+  background: rgba(var(--primary-rgb), 0.06);
+}
+
+/* 模式切换按钮 */
+.theme-toggle {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  width: 42px;
+  height: 42px;
+  border-radius: var(--radius-twelve);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--on-surface-variant);
+  transition: all var(--transition-speed) ease;
+  outline: none;
+}
+
+.theme-toggle:hover {
+  background: rgba(var(--primary-rgb), 0.08);
+  color: var(--primary);
+}
+
+.theme-toggle svg {
+  width: 20px;
+  height: 20px;
+  fill: currentColor;
+}
+
+.theme-toggle .sun-icon {
+  display: none;
+}
+
+body.dark .theme-toggle .moon-icon {
+  display: none;
+}
+
+body.dark .theme-toggle .sun-icon {
+  display: block;
+}
+
+/* --------------------------------------------------------------------------
+   5. 主体布局 (Main Structure)
+   -------------------------------------------------------------------------- */
+.main-wrapper {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 40px 24px 80px 24px;
+  display: flex;
+  gap: 48px;
+  position: relative;
+}
+
+/* --------------------------------------------------------------------------
+   6. 侧边栏大纲导航 (Sidebar Outline - ScrollSpy)
+   -------------------------------------------------------------------------- */
+.sidebar {
+  width: 280px;
+  flex-shrink: 0;
+  position: sticky;
+  top: calc(var(--navbar-height) + 40px);
+  max-height: calc(100vh - var(--navbar-height) - 80px);
+  overflow-y: auto;
+  padding-right: 12px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--outline-variant) transparent;
+}
+
+/* 自定义滚动条 */
+.sidebar::-webkit-scrollbar {
+  width: 4px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+  background: var(--outline-variant);
+  border-radius: 4px;
+}
+
+.sidebar-title {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--on-surface-variant);
+  margin-bottom: 16px;
+  opacity: 0.8;
+}
+
+.outline-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.outline-item a {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--on-surface-variant);
+  padding: 8px 12px;
+  border-radius: 8px;
+  border-left: 2px solid transparent;
+  transition: all var(--transition-speed) ease;
+}
+
+.outline-item a:hover {
+  color: var(--primary);
+  background: rgba(var(--primary-rgb), 0.04);
+}
+
+.outline-item.active a {
+  color: var(--primary);
+  font-weight: 600;
+  border-left-color: var(--primary);
+  background: rgba(var(--primary-rgb), 0.06);
+}
+
+/* --------------------------------------------------------------------------
+   7. 文档正文区域 (Document Body)
+   -------------------------------------------------------------------------- */
+.doc-content {
+  flex-grow: 1;
+  min-width: 0; /* 防止 Flex 子项溢出 */
+}
+
+.doc-header {
+  margin-bottom: 40px;
+}
+
+.doc-meta {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--primary);
+  margin-bottom: 12px;
+}
+
+.doc-title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  line-height: 1.2;
+  color: var(--on-surface);
+  letter-spacing: -0.02em;
+  margin-bottom: 16px;
+}
+
+.doc-subtitle {
+  font-size: 1.1rem;
+  color: var(--on-surface-variant);
+  line-height: 1.5;
+}
+
+/* 幽灵线 (代替 HR) */
+.ghost-divider {
+  height: 1px;
+  background: var(--outline-variant);
+  margin: 32px 0;
+  border: none;
+}
+
+/* 正文排版 */
+.article-section {
+  margin-bottom: 48px;
+}
+
+.article-section h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--on-surface);
+  margin-bottom: 18px;
+  letter-spacing: -0.01em;
+  scroll-margin-top: calc(var(--navbar-height) + 24px);
+}
+
+.article-section p {
+  font-size: 0.95rem;
+  color: var(--on-surface-variant);
+  margin-bottom: 16px;
+  line-height: 1.75;
+}
+
+.article-section h3 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--on-surface);
+  margin-top: 24px;
+  margin-bottom: 12px;
+  scroll-margin-top: calc(var(--navbar-height) + 24px);
+}
+
+.article-section ul, .article-section ol {
+  margin-left: 20px;
+  margin-bottom: 18px;
+  color: var(--on-surface-variant);
+}
+
+.article-section li {
+  font-size: 0.95rem;
+  margin-bottom: 8px;
+  line-height: 1.6;
+}
+
+/* 拟态卡片 (Glassmorphism Cards) */
+.info-card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-twelve);
+  padding: 24px;
+  margin: 28px 0;
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-speed) ease;
+}
+
+.info-card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+.info-card-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--on-surface);
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.info-card-title svg {
+  width: 20px;
+  height: 20px;
+  fill: var(--primary);
+}
+
+.info-card p {
+  margin-bottom: 0;
+  font-size: 0.9rem;
+}
+
+/* 重点标注 */
+.highlight-badge {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 4px 8px;
+  border-radius: 6px;
+  background: rgba(var(--primary-rgb), 0.08);
+  color: var(--primary);
+  margin-bottom: 12px;
+}
+
+/* 底部页脚 */
+.doc-footer {
+  text-align: center;
+  padding: 40px 0 20px 0;
+  margin-top: 60px;
+  font-size: 0.8rem;
+  color: var(--on-surface-variant);
+  opacity: 0.7;
+}
+
+/* --------------------------------------------------------------------------
+   8. 移动端目录悬浮按钮与抽屉菜单
+   -------------------------------------------------------------------------- */
+.mobile-outline-trigger {
+  display: none;
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 90;
+  background: var(--primary-gradient);
+  color: #FFFFFF;
+  border: none;
+  border-radius: 50%;
+  width: 56px;
+  height: 56px;
+  box-shadow: 0 4px 20px rgba(var(--primary-rgb), 0.4);
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-speed) ease;
+}
+
+.mobile-outline-trigger:hover {
+  transform: translateY(-4px) scale(1.05);
+  box-shadow: 0 6px 24px rgba(var(--primary-rgb), 0.5);
+}
+
+.mobile-outline-trigger svg {
+  width: 24px;
+  height: 24px;
+  fill: currentColor;
+}
+
+/* 移动端侧栏遮罩层 */
+.mobile-drawer-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 101;
+  opacity: 0;
+  transition: opacity var(--transition-speed) ease;
+}
+
+.mobile-drawer-overlay.active {
+  display: block;
+  opacity: 1;
+}
+
+/* 移动端侧边抽屉 */
+.mobile-drawer {
+  position: fixed;
+  top: 0;
+  right: -320px;
+  width: 300px;
+  height: 100vh;
+  background: var(--surface-container-lowest);
+  box-shadow: var(--shadow-lg);
+  z-index: 102;
+  padding: 32px 24px;
+  display: flex;
+  flex-direction: column;
+  transition: right var(--transition-speed) cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.mobile-drawer.active {
+  right: 0;
+}
+
+.mobile-drawer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.mobile-drawer-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--on-surface);
+}
+
+.mobile-drawer-close {
+  background: transparent;
+  border: none;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-twelve);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--on-surface-variant);
+  cursor: pointer;
+}
+
+.mobile-drawer-close:hover {
+  background: rgba(var(--primary-rgb), 0.08);
+  color: var(--primary);
+}
+
+.mobile-drawer-close svg {
+  width: 20px;
+  height: 20px;
+  fill: currentColor;
+}
+
+.mobile-drawer .outline-list {
+  overflow-y: auto;
+  flex-grow: 1;
+}
+
+/* --------------------------------------------------------------------------
+   9. 响应式布局媒体查询 (Responsive)
+   -------------------------------------------------------------------------- */
+@media (max-width: 992px) {
+  .sidebar {
+    display: none; /* 在中屏及以下隐藏常规侧栏 */
+  }
+  
+  .main-wrapper {
+    padding-top: 24px;
+  }
+  
+  .mobile-outline-trigger {
+    display: flex; /* 开启悬浮按钮 */
+  }
+}
+
+@media (max-width: 768px) {
+  .doc-title {
+    font-size: 2rem;
+  }
+  
+  .navbar-container {
+    padding: 0 16px;
+  }
+  
+  .main-wrapper {
+    padding-left: 16px;
+    padding-right: 16px;
+    gap: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .nav-brand span {
+    display: none; /* 极窄屏幕隐藏 App 文字标识 */
+  }
+  
+  .doc-title {
+    font-size: 1.75rem;
+  }
+  
+  .info-card {
+    padding: 16px;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   10. 简约模式 (Minimal Mode — no navbar)
+   -------------------------------------------------------------------------- */
+body.minimal {
+  /* 顶部不再需要为导航栏预留高度 */
+  --navbar-height: 0px;
+}
+
+body.minimal .main-wrapper {
+  padding-top: 64px;
+  padding-bottom: 80px;
+}
+
+body.minimal .sidebar {
+  top: 40px;
+  max-height: calc(100vh - 80px);
+}
+
+body.minimal .doc-title {
+  font-size: 2.25rem;
+}
+
+body.minimal .doc-meta {
+  font-size: 0.7rem;
+  opacity: 0.6;
+}
+
+body.minimal .doc-header {
+  margin-bottom: 32px;
+}
+
+/* 简约模式下卡片减少视觉重量 */
+body.minimal .info-card {
+  background: var(--surface-container-low);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border: none;
+  box-shadow: none;
+}
+
+body.minimal .info-card:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+/* 简约模式下移动端 FAB 颜色更低调 */
+body.minimal .mobile-outline-trigger {
+  background: var(--on-surface-variant);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+}
+
+body.minimal .mobile-outline-trigger:hover {
+  background: var(--primary);
+  box-shadow: 0 6px 20px rgba(var(--primary-rgb), 0.3);
+}
+

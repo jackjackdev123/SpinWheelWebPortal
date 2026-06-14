@@ -1,0 +1,13 @@
+# AI agent 配置与上下文文件
+CLAUDE.md
+.agent/
+
+# 设计系统缓存
+design-system/
+
+# macOS
+.DS_Store
+
+# 编辑器
+.idea/
+.vscode/
